@@ -10,10 +10,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.os.Handler;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,87 +23,63 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private SensorManager sensorManager;
     private Sensor proximitySensor;
-    private MusicPlayer player;
     private boolean isPlaying = false;
-    private Handler handler = new Handler();
-    private TextView tvTime;
+    private Intent musicServiceIntent;
+
+    private TextView tv_time;
     private ProgressBar progressBar;
-
-    private Runnable updateTimeRunnable = new Runnable() {
-        @Override
-        public void run() {
-            int remainingTime = player.getRemainingTime();
-            int totalTime = player.getDuration();
-            int currentTime = totalTime - remainingTime;
-            int minutes = currentTime / 1000 / 60;
-            int seconds = (currentTime / 1000) % 60;
-            int totalMinutes = totalTime / 1000 / 60;
-            int totalSeconds = (totalTime / 1000) % 60;
-
-            tvTime.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, totalMinutes, totalSeconds));
-            progressBar.setProgress(currentTime * 100 / totalTime);
-            handler.postDelayed(this, 1000);
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvTime = findViewById(R.id.tv_time);
+        ImageView imageView = findViewById(R.id.image);
+        imageView.setImageResource(R.drawable.image);
+
         progressBar = findViewById(R.id.progress_bar);
+        tv_time = findViewById(R.id.tv_time);
+
+        Button playButton = findViewById(R.id.playButton);
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playMusic();
+            }
+        });
+
+        Button pauseButton = findViewById(R.id.pauseButton);
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pauseMusic();
+            }
+        });
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-        player = new MusicPlayer(this, R.raw.song1);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID, "Music Service Channel",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
+        if (proximitySensor == null) {
+            finish();  // No proximity sensor found, finish the Activity.
         }
 
-        if(proximitySensor == null) {
-            Toast.makeText(this, "Proximity sensor not available.", Toast.LENGTH_LONG).show();
-            finish();
-        } else {
-            sensorManager.registerListener(this, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
+        musicServiceIntent = new Intent(this, MusicService.class);
+
+        createNotificationChannel();
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
-            if (event.values[0] < proximitySensor.getMaximumRange()) {
-                if (isPlaying) {
-                    player.pause();
-                    handler.removeCallbacks(updateTimeRunnable);
-                    stopMusicService();
-                } else {
-                    player.play();
-                    handler.post(updateTimeRunnable);
-                    startMusicService();
-                }
-                isPlaying = !isPlaying;
-            }
+    private void playMusic() {
+        if (!isPlaying) {
+            startService(musicServiceIntent);
+            isPlaying = true;
         }
     }
 
-    private void startMusicService() {
-        Intent intent = new Intent(this, MusicService.class);
-        startService(intent);
-    }
-
-    private void stopMusicService() {
-        Intent intent = new Intent(this, MusicService.class);
-        stopService(intent);
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    private void pauseMusic() {
+        if (isPlaying) {
+            stopService(musicServiceIntent);
+            isPlaying = false;
+        }
     }
 
     @Override
@@ -115,15 +92,36 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onPause() {
         super.onPause();
         sensorManager.unregisterListener(this);
-        player.pause();
-        isPlaying = false;
-        handler.removeCallbacks(updateTimeRunnable);
-        stopMusicService();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        player.release();
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+            if (event.values[0] < proximitySensor.getMaximumRange()) {
+                // Detected something nearby
+                playMusic();
+            } else {
+                // Nothing is nearby
+                pauseMusic();
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // We don't need this for a proximity sensor.
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "MusicServiceChannel";
+            String description = "Channel for Music Service";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }

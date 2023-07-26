@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/blueboss_gradientlinear"
     tools:context=".MainActivity">
 
     <!-- Imagen que se muestra en la parte superior de la aplicación -->
@@ -19,8 +20,11 @@
         android:id="@+id/playButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="#BCD2E8"
+        android:fontFamily="@font/amaranth_bold"
         android:text="Play"
-        android:layout_gravity="center_horizontal" />
+        android:textSize="16sp" />
 
     <!-- Botón para pausar la música -->
     <Button
@@ -28,7 +32,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pause"
-        android:layout_gravity="center_horizontal" />
+        android:backgroundTint="#91BAD6"
+        android:fontFamily="@font/amaranth_bold"
+        android:layout_gravity="center_horizontal"
+        android:textSize="16sp"/>
 
     <!-- Botón para ir a la siguiente pista -->
     <Button
@@ -36,7 +43,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Next"
-        android:layout_gravity="center_horizontal" />
+        android:backgroundTint="#73A5C6"
+        android:fontFamily="@font/amaranth_bold"
+        android:layout_gravity="center_horizontal"
+        android:textSize="16sp"/>
 
     <!-- Botón para ir a la pista anterior -->
     <Button
@@ -44,14 +54,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Previous"
-        android:layout_gravity="center_horizontal" />
+        android:backgroundTint="#528AAE"
+        android:fontFamily="@font/amaranth_bold"
+        android:layout_gravity="center_horizontal"
+        android:textSize="16sp"/>
 
     <!-- Botón para añadir una nueva canción -->
     <Button
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="#2E5984"
+        android:fontFamily="@font/amaranth_bold"
         android:text="Add"
-        android:layout_gravity="center_horizontal" />
+        android:textSize="16sp"/>
 
 </LinearLayout>

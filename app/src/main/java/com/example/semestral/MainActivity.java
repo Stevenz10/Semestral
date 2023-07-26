@@ -251,12 +251,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager.registerListener(this, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    // Método que se ejecuta cuando se pausa la actividad
     @Override
-    protected void onPause() {
-        super.onPause();
-        sensorManager.unregisterListener(this);
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(musicServiceIntent);
     }
+
 
     // Método que se ejecuta cuando cambia el sensor
     @Override

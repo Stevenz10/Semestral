@@ -61,11 +61,6 @@ public class MusicPlayer {
         } else {
             Log.d("MusicPlayer", "Could not list files in myMusicFolder");
         }
-
-        // Imprime todas las canciones disponibles
-        for (MediaPlayer mediaPlayer : mediaPlayers) {
-            Log.d("MusicPlayer", "Song: " + mediaPlayer.toString());
-        }
     }
 
     // Método para reproducir la música

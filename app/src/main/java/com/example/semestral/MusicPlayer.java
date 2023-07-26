@@ -20,7 +20,6 @@ public class MusicPlayer {
     private List<File> musicFiles; // Añade esta línea para llevar un registro de los archivos de música
     private int currentTrack = 0;
     private Context context;
-    private boolean isRawSongAdded = false;
 
     // Constructor de la clase MusicPlayer
     public MusicPlayer(Context context) {
@@ -35,14 +34,10 @@ public class MusicPlayer {
         mediaPlayers.clear();
         musicFiles.clear(); // Asegúrate de limpiar la lista de archivos de música también
 
-        // Añadiendo canción de la carpeta raw, sólo si no ha sido añadida aún
-        if (!isRawSongAdded) {
-            Resources res = context.getResources();
-            int song1 = res.getIdentifier("song1", "raw", context.getPackageName());
-            MediaPlayer mediaPlayerRaw = MediaPlayer.create(context, song1);
-            mediaPlayers.add(mediaPlayerRaw);
-            isRawSongAdded = true;  // La canción raw ha sido añadida
-        }
+        Resources res = context.getResources();
+        int song1 = res.getIdentifier("song1", "raw", context.getPackageName());
+        MediaPlayer mediaPlayerRaw = MediaPlayer.create(context, song1);
+        mediaPlayers.add(mediaPlayerRaw);
 
         // Añadiendo canciones de la carpeta externa
         File musicDir = new File(context.getExternalFilesDir(null), "/myMusicFolder/");

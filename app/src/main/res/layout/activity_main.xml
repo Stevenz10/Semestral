@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:backgroundTint="#BCD2E8"
+        android:backgroundTint="#3A9BB2"
         android:fontFamily="@font/amaranth_bold"
         android:text="Play"
         android:textSize="16sp" />
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pause"
-        android:backgroundTint="#91BAD6"
+        android:backgroundTint="#2685A2"
         android:fontFamily="@font/amaranth_bold"
         android:layout_gravity="center_horizontal"
         android:textSize="16sp"/>
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Next"
-        android:backgroundTint="#73A5C6"
+        android:backgroundTint="#196F92"
         android:fontFamily="@font/amaranth_bold"
         android:layout_gravity="center_horizontal"
         android:textSize="16sp"/>
@@ -54,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Previous"
-        android:backgroundTint="#528AAE"
+        android:backgroundTint="#0C5A83"
         android:fontFamily="@font/amaranth_bold"
         android:layout_gravity="center_horizontal"
         android:textSize="16sp"/>
@@ -65,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:backgroundTint="#2E5984"
+        android:backgroundTint="#03406D"
         android:fontFamily="@font/amaranth_bold"
         android:text="Add"
         android:textSize="16sp"/>

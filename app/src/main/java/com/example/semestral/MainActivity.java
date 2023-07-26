@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (service != null) {
             service.getPlayer().play();
         }
+        Toast.makeText(this, "Playing", Toast.LENGTH_SHORT).show();
         isPlaying = true;
     }
 
@@ -152,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (service != null) {
             service.getPlayer().pause();
         }
+        Toast.makeText(this, "Pause", Toast.LENGTH_SHORT).show();
         isPlaying = false;
     }
 
